@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 
-batch1 = pickle.load(open(r'.\Data\batch1.pkl', 'rb'))
+batch1 = pickle.load(open(r'./Data/batch1.pkl', 'rb'))
 #remove batteries that do not reach 80% capacity
 del batch1['b1c8']
 del batch1['b1c10']
@@ -13,13 +13,13 @@ del batch1['b1c22']
 
 numBat1 = len(batch1.keys())
 print('Battery numbers of Batch1:',numBat1) #41
-batch2 = pickle.load(open(r'.\Data\batch2.pkl','rb'))
+batch2 = pickle.load(open(r'./Data/batch2.pkl','rb'))
 
 # There are four cells from batch1 that carried into batch2, we'll remove the data from batch2
 # and put it with the correct cell from batch1
 batch2_keys = ['b2c7', 'b2c8', 'b2c9', 'b2c15', 'b2c16']
 batch1_keys = ['b1c0', 'b1c1', 'b1c2', 'b1c3', 'b1c4']
-add_len = [662, 981, 1060, 208, 482];
+add_len = [662, 981, 1060, 208, 482]
 
 for i, bk in enumerate(batch1_keys):
     batch1[bk]['cycle_life'] = batch1[bk]['cycle_life'] + add_len[i]
@@ -43,7 +43,7 @@ numBat2 = len(batch2.keys())
 print('Battery numbers of Batch2:',numBat2) #43
 
 
-batch3 = pickle.load(open(r'.\Data\batch3.pkl','rb'))
+batch3 = pickle.load(open(r'./Data/batch3.pkl','rb'))
 # remove noisy channels from batch3
 del batch3['b3c37']
 del batch3['b3c2']

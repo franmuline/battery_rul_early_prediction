@@ -12,6 +12,7 @@ from scipy.stats import pearsonr,spearmanr
 from sklearn.feature_selection import RFE, RFECV
 import seaborn as sns
 import os
+import matplotlib.pyplot as plt
 
 def extract_bat_cycle_life(batch,index):
     """
@@ -46,6 +47,12 @@ def extract_delta_Q_min_mean(batch,index,start_cycle,end_cycle):
         cell_no = list(batch.keys())[ind]
         Qd_100 = batch[cell_no]['cycles'][str(end_cycle-1)]['Qdlin']
         Qd_10 = batch[cell_no]['cycles'][str(start_cycle-1)]['Qdlin']
+        # Plot the two curves to see the difference
+        plt.plot(Qd_100,label='Qd_100')
+        plt.plot(Qd_10,label='Qd_10')
+        plt.legend()
+        plt.show()
+
         delta = Qd_100-Qd_10
         min_log = log(abs(min(delta)),10) # log base 10
         mean_log = log(abs(np.average(delta)), 10)  # log base 10
@@ -72,6 +79,11 @@ def extract_delta_Q_variance(batch,index,start_cycle,end_cycle):
         Qd_100 = batch[cell_no]['cycles'][str(end_cycle-1)]['Qdlin']
         Qd_10 = batch[cell_no]['cycles'][str(start_cycle-1)]['Qdlin']
         #Calculte the log of variance of (Qd100 - Qd10)
+        # Plot the two curves to see the difference
+        plt.plot(Qd_100,label='Qd_100')
+        plt.plot(Qd_10,label='Qd_10')
+        plt.legend()
+        plt.show()
         var_log = log(abs(variance(Qd_100-Qd_10)),10) # log base 10
         X.append(var_log)
     X = np.reshape(X,(-1,1))
