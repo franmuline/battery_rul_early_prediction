@@ -47,11 +47,6 @@ def extract_delta_Q_min_mean(batch,index,start_cycle,end_cycle):
         cell_no = list(batch.keys())[ind]
         Qd_100 = batch[cell_no]['cycles'][str(end_cycle-1)]['Qdlin']
         Qd_10 = batch[cell_no]['cycles'][str(start_cycle-1)]['Qdlin']
-        # Plot the two curves to see the difference
-        plt.plot(Qd_100,label='Qd_100')
-        plt.plot(Qd_10,label='Qd_10')
-        plt.legend()
-        plt.show()
 
         delta = Qd_100-Qd_10
         min_log = log(abs(min(delta)),10) # log base 10
@@ -78,12 +73,6 @@ def extract_delta_Q_variance(batch,index,start_cycle,end_cycle):
         cell_no = list(batch.keys())[ind]
         Qd_100 = batch[cell_no]['cycles'][str(end_cycle-1)]['Qdlin']
         Qd_10 = batch[cell_no]['cycles'][str(start_cycle-1)]['Qdlin']
-        #Calculte the log of variance of (Qd100 - Qd10)
-        # Plot the two curves to see the difference
-        plt.plot(Qd_100,label='Qd_100')
-        plt.plot(Qd_10,label='Qd_10')
-        plt.legend()
-        plt.show()
         var_log = log(abs(variance(Qd_100-Qd_10)),10) # log base 10
         X.append(var_log)
     X = np.reshape(X,(-1,1))
@@ -454,10 +443,10 @@ def extract_fea_for_hybrid_model(batch,index):
     slope_91_100, intercept_91_100 = extract_slope_intercept_cycle_to_cycle(batch,index,91,100)
     qd_2 = extract_cycle_QDischarge(batch,index,cycle=2)
     qd_100 = extract_cycle_QDischarge(batch,index,cycle=100)
-    min_ir_2_100 = extract_min_ir_2_to_100(batch,index)
-    diff_ir_2_100 = extract_diff_ir_2_100(batch,index)
+    # min_ir_2_100 = extract_min_ir_2_to_100(batch,index)
+    # diff_ir_2_100 = extract_diff_ir_2_100(batch,index)
 
-    X = np.hstack((var, min, mean, slope_91_100, qd_2, qd_100, min_ir_2_100,diff_ir_2_100))  # 8 features after RFE
+    X = np.hstack((var, min, mean, slope_91_100, qd_2, qd_100))  # , min_ir_2_100,diff_ir_2_100))  # 8 features after RFE
 
     return X
     pass

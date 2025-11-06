@@ -10,10 +10,9 @@ from math import sqrt
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
-from torchsummary import  summary
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
-from sklearn.externals import joblib
+import joblib
 from utils.sgdr import CosineAnnealingLR_with_Restart
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -44,7 +43,7 @@ class cnn_model_kp(nn.Module):
         self.input_fc_dim = input_fc_dim
 
         self.encoder = nn.Sequential(
-            nn.Conv1d(in_channels=21, out_channels=32, kernel_size=5, stride=1),
+            nn.Conv1d(in_channels=self.input_dim, out_channels=32, kernel_size=5, stride=1),
             nn.ReLU(),
             nn.MaxPool1d(kernel_size=3),
             nn.Conv1d(in_channels=32, out_channels=32, kernel_size=5, stride=1),
@@ -122,7 +121,7 @@ for iteration in range(iterations):
 
     if train_enable:
 
-        model = cnn_model_kp(input_dim = train_x.shape[2],input_fc_dim=train_x_fc.shape[1],hidden_dim=hidden_dim).to(device)
+        model = cnn_model_kp(input_dim = train_x.shape[1],input_fc_dim=train_x_fc.shape[1],hidden_dim=hidden_dim).to(device)
 
         optimizer = optim.SGD(model.parameters(),lr=0.1, weight_decay=0.001, momentum=0.9)
         criterion = nn.MSELoss()
@@ -163,7 +162,7 @@ for iteration in range(iterations):
     models = []
 
     for path in checkpoints:
-        model =cnn_model_kp(input_dim = train_x.shape[2],input_fc_dim=train_x_fc.shape[1],hidden_dim=hidden_dim).to(device)
+        model =cnn_model_kp(input_dim = train_x.shape[1],input_fc_dim=train_x_fc.shape[1],hidden_dim=hidden_dim).to(device)
         ch = torch.load(path)
         model.load_state_dict(ch['state_dict'])
         models.append(model)

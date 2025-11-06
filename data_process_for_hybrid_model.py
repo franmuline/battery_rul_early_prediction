@@ -6,7 +6,7 @@ import pickle
 import os
 import torch
 from sklearn import preprocessing
-from sklearn.externals import joblib
+import joblib
 import argparse
 from statistics import variance
 from scipy.stats import skew,kurtosis,pearsonr
@@ -39,7 +39,7 @@ def extract_local_fea(batch, index, start_cycle, end_cycle):
             cycle_temp=[]
             #raw
             cycle_temp.extend(cycle_feat_extract(batch[cell_no]['cycles'][str(cycle)]['Qdlin']))
-            cycle_temp.extend(cycle_feat_extract(batch[cell_no]['cycles'][str(cycle)]['Tdlin']))
+            # cycle_temp.extend(cycle_feat_extract(batch[cell_no]['cycles'][str(cycle)]['Tdlin']))
             cycle_temp.extend(cycle_feat_extract(batch[cell_no]['cycles'][str(cycle)]['dQdV']))
 
             cycle_data.append(cycle_temp)
@@ -49,7 +49,7 @@ def extract_local_fea(batch, index, start_cycle, end_cycle):
 
 def main():
 
-    for model_choice in range(0,4):
+    for model_choice in range(3,4):
 
         if model_choice==0:
             # Variance Model
@@ -62,7 +62,7 @@ def main():
             model_name ='full'
         else:
             # Hybird Model
-            model_name ='hybird'
+            model_name ='hybrid'
 
         print("Start to create dataset for: ", model_name)
         # Load Data
@@ -146,6 +146,19 @@ def main():
 
         # No Normalization for y
         train_y_nor = train_y
+
+        # np.savez(
+        #     "./Data/A123_dataset_feature_engineered_data_nc100_gfsc10_gfec100.npz",
+        #     train_local_features=train_x_nor,
+        #     train_global_features=train_x_fc_nor,
+        #     train_labels=train_y_nor,
+        #     val_local_features=test_x_pri_nor,
+        #     val_global_features=test_x_pri_fc_nor,
+        #     val_labels=test_y_pri,
+        #     test_local_features=test_x_sec_nor,
+        #     test_global_features=test_x_sec_fc_nor,
+        #     test_labels=test_y_sec
+        # )
 
         dataset={}
 
