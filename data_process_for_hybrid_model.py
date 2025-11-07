@@ -88,7 +88,7 @@ def main():
         train_ind = np.arange(1, (numBat1 + numBat2 - 1), 2)
         secondary_test_ind = np.arange(numBat - numBat3, numBat)
 
-        _, train_y = extract_bat_cycle_life(bat_dict, train_ind)
+        train_y, train_y_log = extract_bat_cycle_life(bat_dict, train_ind)
         test_y_pri,_= extract_bat_cycle_life(bat_dict, test_ind)
         test_y_sec,_ = extract_bat_cycle_life(bat_dict, secondary_test_ind)
 
@@ -144,42 +144,40 @@ def main():
         test_x_pri_fc_nor = scaler_fc.transform(test_x_pri_fc)
         test_x_sec_fc_nor = scaler_fc.transform(test_x_sec_fc)
 
-        # No Normalization for y
-        train_y_nor = train_y
 
-        # np.savez(
-        #     "./Data/A123_dataset_feature_engineered_data_nc100_gfsc10_gfec100.npz",
-        #     train_local_features=train_x_nor,
-        #     train_global_features=train_x_fc_nor,
-        #     train_labels=train_y_nor,
-        #     val_local_features=test_x_pri_nor,
-        #     val_global_features=test_x_pri_fc_nor,
-        #     val_labels=test_y_pri,
-        #     test_local_features=test_x_sec_nor,
-        #     test_global_features=test_x_sec_fc_nor,
-        #     test_labels=test_y_sec
-        # )
+        np.savez(
+            "./Data/A123_dataset_feature_engineered_data_nc100_gfsc10_gfec100.npz",
+            train_local_features=train_x_nor,
+            train_global_features=train_x_fc_nor,
+            train_labels=train_y,
+            val_local_features=test_x_pri_nor,
+            val_global_features=test_x_pri_fc_nor,
+            val_labels=test_y_pri,
+            test_local_features=test_x_sec_nor,
+            test_global_features=test_x_sec_fc_nor,
+            test_labels=test_y_sec
+        )
 
-        dataset={}
-
-        dataset['train_x'] = train_x_nor
-        dataset['train_x_fc'] = train_x_fc_nor
-        dataset['train_y'] = train_y_nor
-
-        dataset['eva_x'] = train_x_nor
-        dataset['eva_x_fc'] = train_x_fc_nor
-        dataset['eva_y'] = train_y_nor
-
-        dataset['test_x_pri'] = test_x_pri_nor
-        dataset['test_x_pri_fc'] = test_x_pri_fc_nor
-        dataset['test_y_pri'] = test_y_pri
-
-        dataset['test_x_sec'] = test_x_sec_nor
-        dataset['test_x_sec_fc'] = test_x_sec_fc_nor
-        dataset['test_y_sec'] = test_y_sec
-
-        data_path = './processed_data/first_100_cycle_data_' + model_name + '.pt'
-        torch.save(dataset,data_path)
+        # dataset={}
+        #
+        # dataset['train_x'] = train_x_nor
+        # dataset['train_x_fc'] = train_x_fc_nor
+        # dataset['train_y'] = train_y_log
+        #
+        # dataset['eva_x'] = train_x_nor
+        # dataset['eva_x_fc'] = train_x_fc_nor
+        # dataset['eva_y'] = train_y_nor
+        #
+        # dataset['test_x_pri'] = test_x_pri_nor
+        # dataset['test_x_pri_fc'] = test_x_pri_fc_nor
+        # dataset['test_y_pri'] = test_y_pri
+        #
+        # dataset['test_x_sec'] = test_x_sec_nor
+        # dataset['test_x_sec_fc'] = test_x_sec_fc_nor
+        # dataset['test_y_sec'] = test_y_sec
+        #
+        # data_path = './processed_data/first_100_cycle_data_' + model_name + '.pt'
+        # torch.save(dataset,data_path)
 
     print("End")
 
